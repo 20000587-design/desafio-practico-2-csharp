@@ -1,0 +1,169 @@
+
+// Nota: hay algunos archivos los cuales sirven para mi ya que yo tengo el sistema operativo de Linux Debian por ese motivo Hay archivos que no serian compatibles para Windows
+
+using System;
+using System.Globalization;
+
+namespace DesafioPractico2
+{
+    internal class Program
+    {
+        // Tamaño fijo de la flota de 5 microbuses
+        const int TAM = 5;
+
+        static void Main(string[] args)
+        {
+            Console.Title = "Desafio Practico 2 - Control de Combustible";
+
+            // Pantalla de bienvenida con datos de los integrantes
+            MostrarBienvenida();
+
+            // Arreglos unidimensionales (Guia 9)
+            String[] unidades = new String[TAM];
+            Double[] kilometros = new Double[TAM];
+            Double[] galones = new Double[TAM];
+
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("     EMPRESA DE TRANSPORTE INTERURBANO - CONTROL DE COMBUSTIBLE     ");
+            Console.WriteLine("====================================================================");
+
+            // Llenado de arreglos con ciclo FOR
+            for (int i = 0; i < TAM; i++)
+            {
+                Console.WriteLine($"\n--- Registro de Unidad [{i + 1} de {TAM}] ---");
+
+                // Captura de identificador y validacion con ciclo WHILE (Guia 7)
+                Console.Write("Identificador de la unidad (ej. MB-01): ");
+                String? entradaId = Console.ReadLine();
+                while (string.IsNullOrWhiteSpace(entradaId))
+                {
+                    Console.WriteLine("Error: el identificador no puede estar vacio.");
+                    Console.Write("Identificador de la unidad (ej. MB-01): ");
+                    entradaId = Console.ReadLine();
+                }
+                unidades[i] = entradaId.Trim();
+
+                // Captura y validacion continua con ciclo WHILE para kilometraje (Guia 6 y 7)
+                Console.Write("Kilometraje recorrido (km): ");
+                String? entradaKm = Console.ReadLine();
+                Double km;
+                while (!Double.TryParse(entradaKm?.Trim().Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out km) || km <= 0)
+                {
+                    Console.WriteLine("Error: ingrese un valor numerico mayor a cero (0).");
+                    Console.Write("Kilometraje recorrido (km): ");
+                    entradaKm = Console.ReadLine();
+                }
+                kilometros[i] = km;
+
+                // Captura y validacion continua con ciclo WHILE para combustible (Guia 6 y 7)
+                Console.Write("Combustible consumido (galones): ");
+                String? entradaGal = Console.ReadLine();
+                Double gal;
+                while (!Double.TryParse(entradaGal?.Trim().Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out gal) || gal <= 0)
+                {
+                    Console.WriteLine("Error: ingrese un valor numerico mayor a cero (0).");
+                    Console.Write("Combustible consumido (galones): ");
+                    entradaGal = Console.ReadLine();
+                }
+                galones[i] = gal;
+            }
+
+            Console.Clear();
+
+            // Llamada al procedimiento de salida
+            MostrarReporte(unidades, kilometros, galones);
+
+            // Pausa de consola para evitar cierre automatico
+            if (!Console.IsInputRedirected)
+            {
+                Console.ReadKey();
+            }
+        }
+
+        // Funcion: calcula el rendimiento km/gal
+        static Double CalcularRendimiento(Double km, Double gal)
+        {
+            return km / gal;
+        }
+
+        // Funcion: clasifica el rendimiento
+        static String ClasificarRendimiento(Double rendimiento)
+        {
+            if (rendimiento >= 30.00)
+            {
+                return "Óptimo";
+            }
+            else
+            {
+                return "Alto Consumo";
+            }
+        }
+
+        // Procedimiento: procesa e imprime reporte consolidado
+        static void MostrarReporte(String[] unidades, Double[] kilometros, Double[] galones)
+        {
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("           REPORTE GENERAL DE RENDIMIENTO DE COMBUSTIBLE");
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("UNIDAD      KILOMETROS     GALONES       RENDIMIENTO (km/gal)    ESTADO");
+            Console.WriteLine("--------------------------------------------------------------------");
+
+            Double totalGalones = 0;
+            Double peorRendimiento = CalcularRendimiento(kilometros[0], galones[0]);
+            int posPeor = 0;
+
+            // Recorrido sistematico con ciclo FOR para procesar
+            for (int i = 0; i < TAM; i++)
+            {
+                Double rend = CalcularRendimiento(kilometros[i], galones[i]);
+                String estado = ClasificarRendimiento(rend);
+
+                // Acumulador de combustible
+                totalGalones = totalGalones + galones[i];
+
+                // Busqueda del menor rendimiento
+                if (rend < peorRendimiento)
+                {
+                    peorRendimiento = rend;
+                    posPeor = i;
+                }
+
+                // Formato de columnas alineadas
+                String colUni = unidades[i].PadRight(12);
+                String colKm = kilometros[i].ToString("0.00", CultureInfo.InvariantCulture).PadLeft(6) + "         ";
+                String colGal = galones[i].ToString("0.00", CultureInfo.InvariantCulture).PadRight(14);
+                String colRend = rend.ToString("0.00", CultureInfo.InvariantCulture).PadRight(24);
+
+                Console.WriteLine($"{colUni}{colKm}{colGal}{colRend}{estado}");
+            }
+
+            Console.WriteLine("--------------------------------------------------------------------");
+            Console.WriteLine($"Total de combustible consumido :  {totalGalones.ToString("0.00", CultureInfo.InvariantCulture)} galones");
+            Console.WriteLine($"Unidad con peor rendimiento    : {unidades[posPeor]} ({peorRendimiento.ToString("0.00", CultureInfo.InvariantCulture)} km/gal)");
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("Presione cualquier tecla para salir...");
+        }
+
+        // Procedimiento: muestra pantalla de bienvenida y datos de los integrantes
+        static void MostrarBienvenida()
+        {
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("          UNIVERSIDAD DON BOSCO - PROGRAMACION ESTRUCTURADA         ");
+            Console.WriteLine("                    DESAFIO PRACTICO #2 - C2 2026                   ");
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("Integrantes del equipo:Dinamita >:D");
+            Console.WriteLine("  1. Geovany Mejia [MM250639]");
+            Console.WriteLine("  2. Josue Tabora [TF263310]");
+            Console.WriteLine("Docente: Mg. Dennis Pérez");
+            Console.WriteLine("====================================================================");
+            Console.WriteLine("Presione cualquier tecla para iniciar el registro...");
+            if (!Console.IsInputRedirected)
+            {
+                Console.ReadKey();
+            }
+            Console.Clear();
+        }
+    }
+}
+
+

@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Defensa Técnica Completa - Desafío Práctico #2 PRE104</title>
+<style>
+    :root {
+      --header-bg: #f5ead2;        /* Beige cálido del encabezado superior */
+      --header-border: #d9b878;    /* Borde dorado suave bajo el header */
+      --bg: #faf8f4;               /* Fondo crema claro principal de la página */
+      --card-bg: #ffffff;          /* Blanco marfil de las tarjetas */
+      --card-inner: #fdfbf7;       /* Fondo interior sutil */
+      --accent: #b45309;           /* Tono ámbar/óxido elegante para títulos y acentos */
+      --accent-secondary: #c28834; /* Dorado tostado */
+      --text: #292524;             /* Gris cálido carbón para máxima legibilidad */
+      --text-muted: #6b635b;       /* Tono neutro secundario */
+      --border: #e6dfd1;           /* Borde crema suave entre elementos */
+      --code-bg: #27201c;          /* Fondo marrón oscuro café para bloques de código */
+      --code-text: #fde68a;        /* Texto del código en dorado ámbar brillante */
+      --success: #15803d;          /* Verde bosque para analogías */
+      --warning: #b45309;          /* Ámbar para preguntas y respuestas */
+      --danger: #b91c1c;           /* Rojo para errores y botones de cerrar */
+      --evidence: #6b21a8;         /* Púrpura sobrio para evidencias */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.7; padding: 0 0 3rem 0; }
+    .header-banner {
+      background-color: var(--header-bg);
+      border-bottom: 3px solid var(--header-border);
+      padding: 3rem 1.5rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(180, 83, 9, 0.06);
+    }
+    .container { max-width: 980px; margin: 0 auto; padding: 0 1.25rem; }
+    header h1 { font-size: 2.35rem; color: #78350f; margin-bottom: 0.75rem; font-weight: 800; letter-spacing: -0.5px; }
+    header p { color: #574d42; font-size: 1.15rem; font-weight: 500; }
+    .meta-badges { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .badge { background: #fdf6e9; border: 1.5px solid var(--accent); color: var(--accent); padding: 0.4rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 2px 5px rgba(180, 83, 9, 0.08); }
+    .badge-purple { background: #f5f0fb; border-color: var(--evidence); color: var(--evidence); }
+    
+    .toc-box { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 1rem; padding: 2rem; margin-bottom: 3rem; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04); }
+    .toc-box h2 { font-size: 1.4rem; color: var(--accent); margin-bottom: 1.25rem; border-bottom: 2px solid var(--header-bg); padding-bottom: 0.6rem; font-weight: 800; }
+    .toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem 1.5rem; }
+    .toc-list li a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; transition: color 0.2s ease; }
+    .toc-list li a:hover { color: var(--accent); }
+    .toc-list li a span { color: var(--accent); font-weight: 800; }
+    
+    .section-divider { margin: 3.5rem 0 2rem 0; border-bottom: 2px solid var(--border); }
+    .section-title { font-size: 1.85rem; color: #78350f; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 800; }
+    .section-title span { background: var(--accent); color: #ffffff; font-size: 1.1rem; font-weight: 900; padding: 0.25rem 0.75rem; border-radius: 0.5rem; box-shadow: 0 2px 6px rgba(180, 83, 9, 0.25); }
+    
+    .card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 1rem; padding: 2rem; margin-bottom: 2.25rem; box-shadow: 0 4px 18px rgba(120, 53, 15, 0.05); }
+    .card h3 { font-size: 1.35rem; color: #431407; margin-bottom: 1.25rem; font-weight: 800; border-bottom: 1px solid var(--header-bg); padding-bottom: 0.5rem; }
+    .item-block { margin-bottom: 1.25rem; }
+    .item-label { font-weight: 800; color: var(--accent); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; display: block; }
+    
+    .analogy { background: #f0fdf4; border-left: 4px solid var(--success); padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1rem 0; font-size: 0.95rem; border: 1px solid #dcfce7; border-left-width: 4px; color: #166534; }
+    .analogy strong { color: #14532d; }
+    
+    .evidence-box { background: #faf5ff; border-left: 4px solid var(--evidence); padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1rem 0; font-size: 0.95rem; border: 1px solid #f3e8ff; border-left-width: 4px; color: #581c87; }
+    .evidence-box strong { color: #3b0764; }
+    
+    .code-block { background: var(--code-bg); border: 1.5px solid #3f2f25; border-radius: 0.6rem; padding: 1rem 1.25rem; margin: 0.75rem 0 1.25rem 0; overflow-x: auto; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.92rem; color: var(--code-text); line-height: 1.5; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12); }
+    
+    .qna-box { background: #fffbeb; border-left: 4px solid var(--warning); padding: 1.1rem 1.35rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.25rem 0 0.5rem 0; border: 1px solid #fef3c7; border-left-width: 4px; }
+    .qna-box strong { color: #92400e; display: block; margin-bottom: 0.4rem; font-size: 1rem; }
+    .qna-box p { color: #78350f; font-style: italic; font-weight: 500; }
+    
+    .btn-diagram { background: linear-gradient(135deg, #b45309, #d97706); color: white; border: none; padding: 0.7rem 1.4rem; border-radius: 0.6rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; margin: 0.6rem 0 1.1rem 0; box-shadow: 0 3px 10px rgba(180, 83, 9, 0.25); transition: all 0.2s ease; font-size: 0.95rem; }
+    .btn-diagram:hover { background: linear-gradient(135deg, #d97706, #f59e0b); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(180, 83, 9, 0.35); }
+    
+    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(41, 37, 36, 0.75); backdrop-filter: blur(5px); justify-content: center; align-items: center; padding: 1.5rem; }
+    .modal.show { display: flex; }
+    .modal-content { background: #faf8f4; border: 2px solid var(--header-border); border-radius: 1.25rem; max-width: 950px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2.25rem; position: relative; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3); }
+    .modal-close { position: absolute; top: 1rem; right: 1.25rem; font-size: 2rem; color: #a8a29e; cursor: pointer; background: none; border: none; font-weight: bold; line-height: 1; transition: color 0.2s ease; }
+    .modal-close:hover { color: var(--danger); }
+    .diagram-svg-container { width: 100%; display: flex; justify-content: center; margin-top: 1rem; background: #ffffff; padding: 1.5rem; border-radius: 0.8rem; border: 1px solid var(--border); box-shadow: inset 0 2px 6px rgba(0,0,0,0.02); }
+    svg { max-width: 100%; height: auto; }
+    
+    footer { text-align: center; margin-top: 5rem; padding: 2.5rem 1rem 1rem 1rem; border-top: 2px solid var(--border); color: var(--text-muted); font-size: 0.95rem; background: var(--header-bg); border-top: 2px solid var(--header-border); }
+
+    /* Barra de pestañas para alternar vistas */
+    .view-toggle-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .view-tab-btn {
+      background: #f5ead2;
+      color: #78350f;
+      border: 1.5px solid var(--header-border);
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .view-tab-btn:hover {
+      background: #e8d7b3;
+      color: #451a03;
+    }
+    .view-tab-btn.active {
+      background: var(--accent);
+      border-color: #92400e;
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(180, 83, 9, 0.25);
+    }
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .view-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilos del Mega Glosario en paleta cálida */
+    .glossary-cat-header {
+      background: #f5ead2;
+      color: #78350f;
+      padding: 11px 18px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      margin: 1.6rem 0 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 5px solid var(--accent);
+      border-top: 1px solid var(--header-border);
+      border-right: 1px solid var(--header-border);
+      border-bottom: 1px solid var(--header-border);
+    }
+    .glossary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+    .glossary-table th {
+      background: #f5efe4;
+      color: #78350f;
+      text-align: left;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--header-border);
+      font-weight: 800;
+    }
+    .glossary-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f0ede6;
+      font-size: 0.92rem;
+      vertical-align: top;
+      line-height: 1.55;
+      color: #383129;
+    }
+    .glossary-table tr:hover {
+      background: #fdfbf7;
+    }
+    .glossary-word {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      color: #b45309;
+      font-weight: 800;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+    .glossary-cat {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .cat-kw { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .cat-type { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .cat-meth { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
+    .cat-op { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+    .cat-var { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+    .cat-sym { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+</style>
+</head>
+<body>
+<div class="container">
+<header class="header-banner">
+<h1>Manual Maestro de Defensa Técnica</h1>
+<p>Desafío Práctico #2 — Programación Estructurada (PRE104, UDB C2-2026)</p>
+<div class="meta-badges">
+<span class="badge">Docente: Mg. Dennis Pérez</span>
+<span class="badge">Alumnos: Geovany Mejía &amp; Josué Tábora</span>
+<span class="badge badge-purple">Evidencias de Guías 6, 7, 8 y 9</span>
+<span class="badge">Orden Lineal Completo</span>
+</div>
+</header>
+<div class="toc-box">
+<h2>Índice General</h2>
+<ul class="toc-list"><li><a href="#sec-glosario"><span>📖</span> Glosario / Diccionario Técnico Completo</a></li>
+<li><a href="#sec-1"><span>1.</span> Directivas y Espacios de Nombres</a></li>
+<li><a href="#sec-2"><span>2.</span> Estructura de la Clase y Modificadores</a></li>
+<li><a href="#sec-3"><span>3.</span> Punto de Entrada (Main)</a></li>
+<li><a href="#sec-4"><span>4.</span> Variables, Constantes y Tipos de Datos</a></li>
+<li><a href="#sec-5"><span>5.</span> Arreglos Unidimensionales (Vectores)</a></li>
+<li><a href="#sec-6"><span>6.</span> Entrada y Salida en Consola</a></li>
+<li><a href="#sec-7"><span>7.</span> Ciclos de Control (FOR y WHILE)</a></li>
+<li><a href="#sec-8"><span>8.</span> Estructuras de Decisión (IF / ELSE)</a></li>
+<li><a href="#sec-9"><span>9.</span> Modularización: Funciones vs Procedimientos</a></li>
+<li><a href="#sec-10"><span>10.</span> Conversión y Validación Segura</a></li>
+<li><a href="#sec-11"><span>11.</span> Manejo de Cadenas de Texto</a></li>
+<li><a href="#sec-12"><span>12.</span> Formateo Numérico y Columnas</a></li>
+<li><a href="#sec-13"><span>13.</span> Algoritmo de Búsqueda del Peor Rendimiento</a></li>
+</ul>
+</div>
+<!-- SECCIÓN 1 -->
+<div class="section-divider" id="sec-glosario"></div>
+<div class="section-title"><span>📖</span> Glosario y Diccionario Técnico Completo del Código</div>
+<div class="card">
+<p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 0.8rem;">
+    A continuación tienes el <strong>diccionario exhaustivo y minucioso de absolutamente cada palabra clave, tipo de dato, modificador, método, variable y símbolo</strong> que compone el código fuente de tu solución (167 líneas de C#).
+  </p>
+<p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+    Está organizado pedagógicamente por categorías funcionales con la paleta de colores institucional para que puedas ubicar cualquier término al instante y explicarle al docente con total soltura qué es y exactamente qué función cumple en tu aplicación.
+  </p>
+<div class="glossary-cat-header">📦 1. Directivas, Librerías y Espacios de Nombres</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">using</span></td>
+<td><span class="glossary-cat cat-kw">Directiva</span></td>
+<td>Directiva del compilador que le indica al entorno que importe tipos y clases de un espacio de nombres externo.</td>
+<td>Líneas 1 y 2: Permite llamar directamente a <code>Console</code> y <code>CultureInfo</code> sin tener que escribir su ruta completa (ej. <code>System.Console.WriteLine</code>).</td>
+</tr>
+<tr>
+<td><span class="glossary-word">System</span></td>
+<td><span class="glossary-cat cat-kw">Namespace Base</span></td>
+<td>El espacio de nombres primordial de la plataforma .NET. Contiene los tipos de datos fundamentales, estructuras del sistema operativo y manejo de consola.</td>
+<td>Línea 1: Habilita el acceso a la clase <code>Console</code>, al tipo <code>String</code>, <code>Double</code>, <code>Math</code> y excepciones básicas.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">System.Globalization</span></td>
+<td><span class="glossary-cat cat-kw">Namespace Especializado</span></td>
+<td>Espacio de nombres de .NET enfocado en la internacionalización, formatos numéricos, monedas y configuraciones regionales de fechas e idiomas.</td>
+<td>Línea 2: Provee <code>CultureInfo.InvariantCulture</code> y <code>NumberStyles.Any</code> para blindar el parseo de números con punto o coma decimal.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">namespace</span></td>
+<td><span class="glossary-cat cat-kw">Palabra Clave</span></td>
+<td>Palabra reservada que declara un contenedor lógico y jerárquico para aislar el código y prevenir colisiones entre identificadores.</td>
+<td>Línea 4: Agrupa todo el desafío bajo el paquete identificador <code>namespace DesafioPractico2</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">DesafioPractico2</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Proyecto</span></td>
+<td>Nombre único asignado al espacio de nombres de la solución del laboratorio.</td>
+<td>Línea 4: Identifica formalmente la entrega académica frente a la estructura del compilador de C#.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">🏛️ 2. Estructura de Clases, Modificadores de Acceso y Memoria</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">internal</span></td>
+<td><span class="glossary-cat cat-kw">Modificador de Acceso</span></td>
+<td>Especificador de visibilidad que limita el acceso a un tipo o miembro exclusivamente al mismo archivo ejecutable o ensamblado (assembly).</td>
+<td>Línea 6: Aplica a <code>internal class Program</code>, garantizando que el programa sea visible en su ejecutable sin exponerse a librerías externas.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">class</span></td>
+<td><span class="glossary-cat cat-kw">Palabra Clave</span></td>
+<td>Palabra clave de C# para definir un tipo por referencia que sirve de molde o plantilla que agrupa variables, constantes y métodos.</td>
+<td>Línea 6: Declara la clase <code>Program</code> que almacena la constante <code>TAM</code> y los 5 submódulos del sistema.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Program</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Clase</span></td>
+<td>Nombre estándar de la clase principal por defecto en aplicaciones de consola de .NET.</td>
+<td>Línea 6: Aloja el método de entrada <code>Main</code> y todos los procedimientos y funciones auxiliares.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">static</span></td>
+<td><span class="glossary-cat cat-kw">Modificador de Memoria</span></td>
+<td>Modificador que declara que un miembro pertenece directamente a la clase misma y no a una instancia individual. Vive en memoria estática.</td>
+<td>Líneas 11, 81, 87, 100, 145: Permite invocar <code>Main()</code>, <code>CalcularRendimiento()</code> y los demás métodos sin necesidad de instanciar un objeto con <code>new Program()</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">void</span></td>
+<td><span class="glossary-cat cat-kw">Palabra Clave / Tipo Retorno</span></td>
+<td>Palabra clave utilizada como tipo de retorno en métodos para indicar que ejecutan una acción o procedimiento pero NO devuelven ningún dato.</td>
+<td>Líneas 11, 100, 145: Define a <code>Main</code>, <code>MostrarReporte</code> y <code>MostrarBienvenida</code> como procedimientos puros (sin retorno de valor).</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Main</span></td>
+<td><span class="glossary-cat cat-meth">Punto de Entrada Primario</span></td>
+<td>Nombre reservado del método estático que el sistema operativo invoca obligatoriamente como el primer paso de ejecución de la aplicación.</td>
+<td>Líneas 11-78: Orquesta todo el programa: muestra bienvenida, crea los arreglos, ejecuta el bucle de captura y llama al reporte final.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">string[] args</span></td>
+<td><span class="glossary-cat cat-type">Parámetro de Entrada</span></td>
+<td>Arreglo unidimensional de cadenas de texto que recibe los argumentos pasados por consola de comandos al iniciar el binario.</td>
+<td>Línea 11: Cumple con la firma obligatoria de C# para el punto de entrada de consola.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">💾 3. Variables, Constantes y Tipos de Datos</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">const</span></td>
+<td><span class="glossary-cat cat-kw">Modificador de Inmutabilidad</span></td>
+<td>Palabra clave que define una variable cuyo valor es evaluado en tiempo de compilación y que jamás puede ser modificado durante la ejecución.</td>
+<td>Línea 9: Define <code>const int TAM = 5;</code>, asegurando que la flota de 5 unidades sea una constante global inmutable en toda la clase.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">int</span></td>
+<td><span class="glossary-cat cat-type">Tipo de Dato Primitivo</span></td>
+<td>Tipo primitivo de 32 bits con signo (System.Int32) que almacena números enteros en el rango de -2,147,483,648 a +2,147,483,647.</td>
+<td>Líneas 9, 28, 110, 113: Utilizado para la constante <code>TAM</code>, los índices de iteración <code>for (int i = 0...)</code> y el índice <code>posPeor</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Double</span></td>
+<td><span class="glossary-cat cat-type">Tipo de Dato Numérico</span></td>
+<td>Tipo de punto flotante de 64 bits y doble precisión (System.Double). Provee 15-17 dígitos de precisión decimal.</td>
+<td>Líneas 20, 21, 46, 58, 81, 87, 108: Almacena con máxima precisión matemática los kilómetros, galones, rendimientos y acumuladores.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">String</span></td>
+<td><span class="glossary-cat cat-type">Tipo de Dato por Referencia</span></td>
+<td>Tipo de dato de .NET (System.String) que almacena secuencias inmutables de caracteres Unicode.</td>
+<td>Líneas 19, 34, 45, 57, 87, 116, 129: Guarda nombres de microbuses (MB-01), texto crudo leído del teclado y etiquetas de estado ('Óptimo').</td>
+</tr>
+<tr>
+<td><span class="glossary-word">String? (Anulable)</span></td>
+<td><span class="glossary-cat cat-type">Tipo de Dato Nullable</span></td>
+<td>Modificador de tipo introducido en C# 8+ que advierte que una referencia de texto puede contener válidamente el valor <code>null</code>.</td>
+<td>Líneas 34, 45, 57: <code>String? entradaKm = Console.ReadLine();</code> reconoce que el usuario podría presionar Ctrl+C/Ctrl+Z retornando nulo.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">bool</span></td>
+<td><span class="glossary-cat cat-type">Tipo de Dato Lógico</span></td>
+<td>Tipo de dato booleano de 1 byte que solo admite dos estados posibles: <code>true</code> (verdadero) o <code>false</code> (falso).</td>
+<td>Subyacente en todas las condiciones: retorno de <code>Double.TryParse</code>, <code>rendimiento &gt;= 30.00</code> y evaluación del <code>while</code>.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">📊 4. Arreglos y Memoria Dinámica (Vectores)</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">new</span></td>
+<td><span class="glossary-cat cat-kw">Operador de Instanciación</span></td>
+<td>Operador que solicita dinámicamente al runtime de .NET la asignación de un bloque contiguo de memoria en el Heap.</td>
+<td>Líneas 19, 20, 21: Instancia los 3 arreglos en memoria: <code>new String[TAM]</code> y <code>new Double[TAM]</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">[] (Corchetes)</span></td>
+<td><span class="glossary-cat cat-op">Operador de Indexación</span></td>
+<td>Operador de declaración y acceso posicional a celdas contiguas de un arreglo con índice base cero (0 hasta N-1).</td>
+<td>Líneas 19-21, 41, 53, 65, 115, 129: Permite sincronizar los 3 vectores paralelos con el mismo índice <code>i</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">TAM</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Constante</span></td>
+<td>Identificador simbólico de la constante que representa el número total de microbuses a registrar (5).</td>
+<td>Líneas 9, 19, 20, 21, 28, 113: Centraliza la dimensión de la flota para que un cambio de tamaño modifique todo el programa en un solo lugar.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">unidades</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Arreglo</span></td>
+<td>Vector de 5 celdas de tipo <code>String</code> que almacena los códigos o placas de los microbuses.</td>
+<td>Líneas 19, 41, 71, 100, 129, 139: Guarda 'MB-01', 'MB-02', etc., en sincronía con sus datos de consumo.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">kilometros</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Arreglo</span></td>
+<td>Vector de 5 celdas de tipo <code>Double</code> que almacena las distancias recorridas en km.</td>
+<td>Líneas 20, 53, 71, 100, 109, 115: Guarda valores como 450.50 km para cada una de las unidades.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">galones</span></td>
+<td><span class="glossary-cat cat-var">Identificador de Arreglo</span></td>
+<td>Vector de 5 celdas de tipo <code>Double</code> que almacena los volúmenes de diesel consumidos en galones.</td>
+<td>Líneas 21, 65, 71, 100, 109, 115, 119: Guarda el combustible consumido utilizado para calcular rendimientos.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">🖥️ 5. Entrada y Salida por Consola (System.Console)</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">Console</span></td>
+<td><span class="glossary-cat cat-kw">Clase del Sistema</span></td>
+<td>Clase estática fundamental de <code>System</code> que proporciona acceso a los flujos de entrada, salida y error estándar de la consola.</td>
+<td>Utilizada en todo el código para comunicarse visualmente con el usuario en pantalla y capturar sus teclas.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.Title</span></td>
+<td><span class="glossary-cat cat-meth">Propiedad de Consola</span></td>
+<td>Propiedad de tipo texto que define el rótulo que aparece en la barra superior de la ventana del terminal.</td>
+<td>Línea 13: Asigna <code>Console.Title = "Desafio Practico 2 - Control de Combustible";</code> al arrancar.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.Write</span></td>
+<td><span class="glossary-cat cat-meth">Método de Salida</span></td>
+<td>Imprime un mensaje en la consola manteniendo el cursor parpadeando en la misma línea para captura inmediata.</td>
+<td>Líneas 33, 38, 44, 50, 56, 62: Presenta las etiquetas donde el usuario debe teclear (ej. <code>"Kilometraje recorrido: "</code>).</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.WriteLine</span></td>
+<td><span class="glossary-cat cat-meth">Método de Salida con Retorno</span></td>
+<td>Imprime una línea completa de texto en la consola y envía automáticamente un retorno de carro (salto de línea '\n').</td>
+<td>Líneas 23-25, 30, 37, 49, 61, 102-106, 134, 137-140: Dibuja separadores, tablas, advertencias y reportes.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.ReadLine</span></td>
+<td><span class="glossary-cat cat-meth">Método de Entrada de Texto</span></td>
+<td>Detiene la ejecución del programa y lee una línea completa de caracteres ingresada por el usuario al presionar Enter.</td>
+<td>Líneas 34, 39, 45, 51, 57, 63: Lee las entradas crudas de texto para que el programa las procese y valide.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.Clear</span></td>
+<td><span class="glossary-cat cat-meth">Método de Pantalla</span></td>
+<td>Limpia el búfer visible de la pantalla de la consola y reposiciona el cursor en la esquina superior izquierda (0,0).</td>
+<td>Líneas 68 y 161: Limpia la pantalla después de la bienvenida y después de la captura para mostrar un reporte limpio.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.ReadKey</span></td>
+<td><span class="glossary-cat cat-meth">Método de Entrada de Teclado</span></td>
+<td>Pausa la ejecución y espera a que el usuario presione una tecla física en el teclado, retornando su código.</td>
+<td>Líneas 76 y 159: Mantiene la consola abierta y visible tras mostrar la bienvenida y tras el reporte final.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Console.IsInputRedirected</span></td>
+<td><span class="glossary-cat cat-meth">Propiedad de Diagnóstico</span></td>
+<td>Propiedad booleana que detecta si la consola está operando con un teclado humano o con tuberías/redirecciones automatizadas.</td>
+<td>Líneas 74 y 157: Previene fallos de excepción de consola si el docente califica con scripts de evaluación automáticos.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">🔄 6. Estructuras de Control de Flujo (Bucles y Decisiones)</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">for</span></td>
+<td><span class="glossary-cat cat-kw">Bucle de Conteo Determinado</span></td>
+<td>Estructura repetitiva que ejecuta un bloque de instrucciones un número exacto y previamente determinado de veces.</td>
+<td>Líneas 28 y 113: Itera exactamente 5 veces con <code>for (int i = 0; i &lt; TAM; i++)</code> para capturar y procesar la flota.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">i</span></td>
+<td><span class="glossary-cat cat-var">Variable Contador / Índice</span></td>
+<td>Variable entera utilizada convencionalmente como índice de posición en ciclos iterativos de vectores.</td>
+<td>Líneas 28 y 113: Recorre consecutivamente los índices <code>0, 1, 2, 3, 4</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">i++</span></td>
+<td><span class="glossary-cat cat-op">Operador de Post-incremento</span></td>
+<td>Operador aritmético unario que incrementa el valor de la variable en 1 unidad después de evaluar la iteración.</td>
+<td>Líneas 28 y 113: Avanza a la siguiente posición del arreglo en cada vuelta del ciclo.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">while</span></td>
+<td><span class="glossary-cat cat-kw">Bucle Condicional Indeterminado</span></td>
+<td>Estructura repetitiva que vuelve a ejecutar su cuerpo continuamente mientras su condición lógica sea verdadera.</td>
+<td>Líneas 35, 47, 59: Implementa el patrón de 'validación continua', bloqueando al usuario hasta que ingrese un dato válido.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">if</span></td>
+<td><span class="glossary-cat cat-kw">Bifurcación Condicional</span></td>
+<td>Estructura selectiva que evalúa una condición booleana y ejecuta su bloque interno únicamente si es verdadera.</td>
+<td>Líneas 74, 89, 122, 157: Evalúa si <code>rendimiento &gt;= 30.00</code>, si <code>rend &lt; peorRendimiento</code>, etc.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">else</span></td>
+<td><span class="glossary-cat cat-kw">Bifurcación Alternativa</span></td>
+<td>Cláusula complementaria de <code>if</code> que se ejecuta cuando la condición lógica evaluada resulta falsa.</td>
+<td>Línea 93: En <code>ClasificarRendimiento</code>, devuelve 'Alto Consumo' si el rendimiento no alcanzó los 30 km/gal.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">return</span></td>
+<td><span class="glossary-cat cat-kw">Instrucción de Salida</span></td>
+<td>Palabra clave que finaliza la ejecución de un método y transfiere el control y el resultado computado al llamador.</td>
+<td>Líneas 83, 91, 95: Retorna el cociente en <code>CalcularRendimiento</code> (<code>return km / gal;</code>) y el texto de clasificación.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">🧩 7. Métodos y Funciones del Desafío (Modularización)</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">MostrarBienvenida</span></td>
+<td><span class="glossary-cat cat-meth">Procedimiento Auxiliar</span></td>
+<td>Método estático de tipo <code>void</code> encargado de la presentación institucional del sistema.</td>
+<td>Líneas 16 y 145-162: Imprime el encabezado oficial de la UDB, nombres y carnets de Geovany y Josué, y el nombre del docente.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">CalcularRendimiento</span></td>
+<td><span class="glossary-cat cat-meth">Función Matemática</span></td>
+<td>Método con retorno de tipo <code>Double</code> que calcula la eficiencia energética aplicando la fórmula matemática de transporte.</td>
+<td>Líneas 81-84, 109, 115: Ejecuta <code>return km / gal;</code>, dividiendo los kilómetros entre los galones consumidos.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">ClasificarRendimiento</span></td>
+<td><span class="glossary-cat cat-meth">Función de Negocio</span></td>
+<td>Método con retorno de tipo <code>String</code> que evalúa el rendimiento contra el umbral establecido en la guía de evaluación.</td>
+<td>Líneas 87-97, 116: Retorna 'Óptimo' si el rendimiento es &gt;= 30.00 km/gal o 'Alto Consumo' si es menor.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">MostrarReporte</span></td>
+<td><span class="glossary-cat cat-meth">Procedimiento de Análisis y Salida</span></td>
+<td>Método de tipo <code>void</code> que recibe los 3 arreglos paralelos, calcula totales, encuentra el peor y genera la tabla final.</td>
+<td>Líneas 71 y 100-142: Muestra el reporte consolidado alineado en columnas, total de galones y la peor unidad detectada.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">⚙️ 8. Variables de Proceso, Validación y Cálculos Internos</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">entradaId</span></td>
+<td><span class="glossary-cat cat-var">Variable de Entrada</span></td>
+<td>Variable local temporal de tipo <code>String?</code> que almacena el texto del identificador recién leído.</td>
+<td>Líneas 34, 35, 39, 41: Captura la unidad para validarla contra vacíos y luego asignarla en <code>unidades[i]</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">entradaKm</span></td>
+<td><span class="glossary-cat cat-var">Variable de Entrada</span></td>
+<td>Variable local temporal de tipo <code>String?</code> que almacena el kilometraje digitado por el usuario en formato texto.</td>
+<td>Líneas 45, 47, 51: Se valida en el <code>while</code> mediante <code>Double.TryParse</code> antes de aceptarse.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">km</span></td>
+<td><span class="glossary-cat cat-var">Variable de Salida de Parseo</span></td>
+<td>Variable local de tipo <code>Double</code> que recibe el valor numérico exitosamente convertido desde <code>entradaKm</code>.</td>
+<td>Líneas 46, 47, 53, 81: Parámetro <code>out km</code>; una vez validado mayor a cero se guarda en <code>kilometros[i]</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">entradaGal</span></td>
+<td><span class="glossary-cat cat-var">Variable de Entrada</span></td>
+<td>Variable local temporal de tipo <code>String?</code> que almacena el volumen de diesel digitado en formato texto.</td>
+<td>Líneas 57, 59, 63: Se pasa por <code>Double.TryParse</code> para confirmar que sea un número válido mayor a 0.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">gal</span></td>
+<td><span class="glossary-cat cat-var">Variable de Salida de Parseo</span></td>
+<td>Variable local de tipo <code>Double</code> que recibe el número convertido desde <code>entradaGal</code>.</td>
+<td>Líneas 58, 59, 65, 81: Parámetro <code>out gal</code>; al ser válido se guarda en <code>galones[i]</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">totalGalones</span></td>
+<td><span class="glossary-cat cat-var">Variable Acumuladora</span></td>
+<td>Variable acumuladora de tipo <code>Double</code> inicializada en 0 que suma el combustible de todas las unidades.</td>
+<td>Líneas 108, 119, 138: Acumula el total con <code>totalGalones = totalGalones + galones[i];</code> para el informe final.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">peorRendimiento</span></td>
+<td><span class="glossary-cat cat-var">Variable de Comparación Mínima</span></td>
+<td>Variable de tipo <code>Double</code> que almacena el valor numérico del rendimiento más bajo encontrado.</td>
+<td>Líneas 109, 122, 124, 139: Se inicializa con el rendimiento de la unidad 0 (Guía 9 Ejemplo 3) y se actualiza si encuentra uno menor.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">posPeor</span></td>
+<td><span class="glossary-cat cat-var">Variable de Índice Mínimo</span></td>
+<td>Variable entera que guarda el índice de la posición en el arreglo correspondiente al peor microbús.</td>
+<td>Líneas 110, 125, 139: Inicializada en 0; se actualiza con <code>posPeor = i;</code> cuando se descubre un rendimiento más bajo.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">rend</span></td>
+<td><span class="glossary-cat cat-var">Variable de Cálculo Local</span></td>
+<td>Variable local temporal de tipo <code>Double</code> que almacena el rendimiento calculado para la unidad actual.</td>
+<td>Líneas 115, 116, 122, 124, 132: Evita calcular múltiples veces el cociente en la misma iteración.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">estado</span></td>
+<td><span class="glossary-cat cat-var">Variable de Estado</span></td>
+<td>Variable local de tipo <code>String</code> que contiene la clasificación diagnóstica de la unidad ('Óptimo' o 'Alto Consumo').</td>
+<td>Líneas 116 y 134: Se imprime en la última columna del reporte consolidado.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">🛡️ 9. Métodos de Validación, Formato y Cadenas de Texto</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">Double.TryParse</span></td>
+<td><span class="glossary-cat cat-meth">Método de Conversión Segura</span></td>
+<td>Método estático de <code>Double</code> que intenta parsear un texto a número; devuelve <code>true</code> si puede y <code>false</code> si no, sin abortar el programa.</td>
+<td>Líneas 47 y 59: El corazón de la validación numérica: blinda la captura contra letras, símbolos o cadenas vacías.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">out</span></td>
+<td><span class="glossary-cat cat-kw">Modificador de Parámetro</span></td>
+<td>Palabra clave que indica paso de argumento por referencia para salida: el método invocado asigna directamente la variable.</td>
+<td>Líneas 47 y 59: Permite que <code>TryParse(..., out km)</code> devuelva el valor convertido directamente en <code>km</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">NumberStyles.Any</span></td>
+<td><span class="glossary-cat cat-type">Constante de Estilo Numérico</span></td>
+<td>Enumeración de <code>System.Globalization</code> que permite aceptar cualquier estilo numérico válido (espacios, signos, decimales).</td>
+<td>Líneas 47 y 59: Otorga máxima flexibilidad en el parseo numérico de la consola.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">CultureInfo.InvariantCulture</span></td>
+<td><span class="glossary-cat cat-type">Configuración Regional Estándar</span></td>
+<td>Instancia estándar de formato numérico independiente del país, que define el punto '.' como separador decimal universal.</td>
+<td>Líneas 47, 59, 130, 131, 132, 138, 139: Hace que el código sea universal y no dependa de si la máquina está en español o inglés.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">string.IsNullOrWhiteSpace</span></td>
+<td><span class="glossary-cat cat-meth">Método de Verificación de Texto</span></td>
+<td>Método que evalúa si una cadena es <code>null</code>, está completamente vacía <code>""</code> o solo contiene espacios.</td>
+<td>Línea 35: Valida que el usuario no ingrese códigos de microbús vacíos o solo barras de espacio.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Trim()</span></td>
+<td><span class="glossary-cat cat-meth">Método de Limpieza de Espacios</span></td>
+<td>Método de cadena que remueve todos los espacios en blanco sobrantes antes del primer carácter y después del último.</td>
+<td>Líneas 41, 47, 59: Limpia entradas como <code>"  MB-01  "</code> $\rightarrow$ <code>"MB-01"</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">Replace()</span></td>
+<td><span class="glossary-cat cat-meth">Método de Reemplazo de Caracteres</span></td>
+<td>Método de manipulación de cadenas que sustituye cada ocurrencia de un carácter por otro especificado.</td>
+<td>Líneas 47 y 59: <code>Replace(',', '.')</code> sustituye comas decimales por puntos para evitar desbordes en máquinas hispanas.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">?. (Operador Elvis)</span></td>
+<td><span class="glossary-cat cat-op">Operador Condicional Nulo</span></td>
+<td>Operador de seguridad que solo invoca el método de la derecha si el operando izquierdo no es <code>null</code>.</td>
+<td>Líneas 47 y 59: <code>entradaKm?.Trim()</code> evita un error <code>NullReferenceException</code> si la entrada fuera nula.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">ToString("0.00")</span></td>
+<td><span class="glossary-cat cat-meth">Método de Formateo Numérico</span></td>
+<td>Método que convierte un número <code>Double</code> a texto garantizando exactamente dos posiciones decimales.</td>
+<td>Líneas 130, 131, 132, 138, 139: Formatea <code>45</code> como <code>45.00</code> para presentación profesional.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">PadLeft()</span></td>
+<td><span class="glossary-cat cat-meth">Método de Alineación Izquierda</span></td>
+<td>Rellena una cadena con espacios por la izquierda hasta alcanzar un ancho total determinado, alineando números a la derecha.</td>
+<td>Línea 130: <code>PadLeft(6)</code> alinea las cifras numéricas de kilómetros en la columna de la tabla.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">PadRight()</span></td>
+<td><span class="glossary-cat cat-meth">Método de Alineación Derecha</span></td>
+<td>Rellena una cadena con espacios por la derecha hasta alcanzar una longitud dada, alineando texto hacia la izquierda.</td>
+<td>Líneas 129, 131, 132: <code>PadRight(12)</code> alinea los nombres de microbús y rendimientos en la tabla.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">$"..." (Interpolación)</span></td>
+<td><span class="glossary-cat cat-op">Operador de Interpolación</span></td>
+<td>Permite embeber expresiones y variables directamente dentro de cadenas literales utilizando llaves <code>{variable}</code>.</td>
+<td>Líneas 30, 134, 138, 139: Facilita construir líneas compuestas como <code>$"Unidad [{i+1} de {TAM}]"</code> de forma limpia.</td>
+</tr>
+</tbody></table>
+<div class="glossary-cat-header">⚡ 10. Operadores y Símbolos de Sintaxis</div>
+<table class="glossary-table">
+<thead>
+<tr>
+<th style="width: 18%;">Término / Palabra</th>
+<th style="width: 14%;">Categoría</th>
+<th style="width: 38%;">¿Qué es exactamente?</th>
+<th style="width: 30%;">¿Para qué sirve en tu programa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-word">= (Asignación)</span></td>
+<td><span class="glossary-cat cat-op">Operador de Asignación</span></td>
+<td>Asigna el valor o resultado evaluado a la derecha en la posición de memoria o variable ubicada a la izquierda.</td>
+<td>Líneas 9, 41, 53, 65, 108, 110, 115, 119: Guarda datos en variables y casillas de arreglos.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">+ (Suma y Concatenación)</span></td>
+<td><span class="glossary-cat cat-op">Operador Aritmético / Texto</span></td>
+<td>Realiza la adición aritmética entre números o une (concatena) dos cadenas de texto.</td>
+<td>Líneas 30, 119, 130: Suma enteros (<code>i + 1</code>), acumula diesel (<code>totalGalones + galones[i]</code>) y agrega espacios.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">/ (División)</span></td>
+<td><span class="glossary-cat cat-op">Operador Aritmético</span></td>
+<td>Calcula el cociente exacto de la división entre el dividendo y el divisor.</td>
+<td>Línea 83: <code>km / gal</code> divide la distancia entre el combustible consumido.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">&lt; (Menor que)</span></td>
+<td><span class="glossary-cat cat-op">Operador Relacional</span></td>
+<td>Compara dos expresiones numéricas y devuelve <code>true</code> si el primer valor es estrictamente menor al segundo.</td>
+<td>Líneas 28, 113, 122: Controla el límite de iteración (<code>i &lt; TAM</code>) y detecta si <code>rend &lt; peorRendimiento</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">&lt;= (Menor o igual)</span></td>
+<td><span class="glossary-cat cat-op">Operador Relacional</span></td>
+<td>Compara dos valores y retorna <code>true</code> si el primero es menor o exactamente idéntico al segundo.</td>
+<td>Líneas 47 y 59: En el <code>while</code>, <code>km &lt;= 0</code> detecta valores numéricos negativos o cero como inválidos.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">&gt;= (Mayor o igual)</span></td>
+<td><span class="glossary-cat cat-op">Operador Relacional</span></td>
+<td>Evalúa si el valor a la izquierda supera o iguala la cota mínima especificada a la derecha.</td>
+<td>Línea 89: <code>rendimiento &gt;= 30.00</code> para clasificar el estado de la unidad como 'Óptimo'.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">! (Negación Lógica NOT)</span></td>
+<td><span class="glossary-cat cat-op">Operador Lógico Unario</span></td>
+<td>Invierte el valor de verdad de una expresión booleana: convierte <code>true</code> en <code>false</code> y viceversa.</td>
+<td>Líneas 47, 59, 74, 157: <code>!Double.TryParse(...)</code> significa 'si la conversión NO tuvo éxito'.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">|| (Disyunción Lógica OR)</span></td>
+<td><span class="glossary-cat cat-op">Operador Lógico Cortocircuito</span></td>
+<td>Devuelve <code>true</code> si al menos uno de los dos operandos lógicos es verdadero; si el primero es verdadero no evalúa el segundo.</td>
+<td>Líneas 47 y 59: <code>while (!TryParse(...) || valor &lt;= 0)</code>: itera si el dato NO es número O si es menor o igual a cero.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">; (Punto y coma)</span></td>
+<td><span class="glossary-cat cat-sym">Terminador de Sentencia</span></td>
+<td>Símbolo obligatorio en C# que indica el final de una instrucción ejecutable o declaración.</td>
+<td>Presente al final de cada línea de código ejecutable para delimitar las sentencias frente al compilador.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">{ } (Llaves)</span></td>
+<td><span class="glossary-cat cat-sym">Delimitadores de Bloque</span></td>
+<td>Signos que agrupan un conjunto de instrucciones dentro de un ámbito (scope) local para clases, métodos o estructuras de control.</td>
+<td>Delimitan el contenido de <code>namespace</code>, <code>class</code>, <code>Main</code>, <code>for</code>, <code>while</code> e <code>if</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">( ) (Paréntesis)</span></td>
+<td><span class="glossary-cat cat-sym">Operador de Invocación / Agrupación</span></td>
+<td>Encierran argumentos pasados a métodos, condiciones lógicas en estructuras de control y alteran la precedencia de operadores.</td>
+<td>Encierran los parámetros de <code>Console.WriteLine(...)</code> y las condiciones de <code>while (...)</code> y <code>if (...)</code>.</td>
+</tr>
+<tr>
+<td><span class="glossary-word">// (Comentario de una línea)</span></td>
+<td><span class="glossary-cat cat-sym">Directiva de Documentación</span></td>
+<td>Indica que el resto de la línea física es un comentario para humanos que el compilador ignora por completo.</td>
+<td>Líneas 8, 15, 18, 27, 32, 43, 70, 80, 86, 99, 144: Documenta las guías de clase (Guía 6, 7, 8, 9) y el propósito del código.</td>
+</tr>
+</tbody></table>
+</div><div class="section-divider" id="sec-1"></div>
+<div class="section-title"><span>1</span> Directivas y Espacios de Nombres</div>
+<div class="card">
+<h3>1.1 using</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Directiva que importa un espacio de nombres para usar sus clases sin escribir la ruta completa cada vez.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> Estar en una oficina y decir solo "Carlos" en vez de "Carlos Pérez de San Salvador", porque ya saben en qué sala estamos.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">using System;
+Console.WriteLine("Hola");</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Líneas 1 y 2: <code>using System;</code> y <code>using System.Globalization;</code>.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Presente en la línea 1 de <code>Guia8 Ejemplo1.txt</code>, <code>Guia8 Ejemplo7.txt</code> y <code>Guia10 Ejemplo1.txt</code>.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es la directiva de C# que importa librerías como System para usar Console sin anteponer la ruta completa."</p></div>
+</div>
+<div class="card">
+<h3>1.2 System</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Espacio de nombres raíz fundamental de .NET. Contiene los tipos primitivos fundamentales (String, Double, Int32) y la clase Console.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> La caja de herramientas básica que viene de fábrica con el sistema operativo.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">System.DateTime hoy = System.DateTime.Now;</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Permite llamar a Console.WriteLine, Console.ReadLine, Double.TryParse, etc.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Es la librería base utilizada a lo largo de todo el ciclo en todas las guías de laboratorio.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es el namespace principal del entorno .NET donde residen las funciones esenciales de consola y tipos de datos."</p></div>
+</div>
+<div class="card">
+<h3>1.3 System.Globalization</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Espacio de nombres que controla formatos dependientes del idioma y país, especialmente el separador decimal (punto vs coma).</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> Un convertidor de enchufe universal para que tu cargador funcione en cualquier tomacorriente de cualquier país.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">double n = double.Parse("3.14", System.Globalization.CultureInfo.InvariantCulture);</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Se usó con <code>CultureInfo.InvariantCulture</code> en la validación y el reporte final para que el programa acepte y muestre siempre punto decimal (ej. 180.00) sin fallar según el idioma de la máquina.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Se implementó para resolver el error que ocurría en <code>Guia6 Ejemplo1 validado.txt</code>, donde si el teclado de la máquina está en español y el usuario digita punto, el sistema se caía por formato regional.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Lo agregamos para que el programa acepte punto decimal universalmente sin importar si la computadora donde se califique tiene Windows en inglés o en español."</p></div>
+</div>
+<div class="card">
+<h3>1.4 namespace DesafioPractico2</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Contenedor lógico que agrupa clases para evitar colisiones de nombres.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> La etiqueta con el nombre del proyecto en una carpeta del archivador para no confundirse con otras tareas.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">namespace MiProyecto { class MiClase { } }</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Línea 4: Envuelve toda la solución bajo el nombre oficial DesafioPractico2.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia8 Ejemplo1.txt</code> (Línea 2: <code>namespace Guia8ejemplo1</code>) y <code>Guia8 Ejemplo4.txt</code> (Línea 2: <code>namespace Guia8ejemplo4</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es el contenedor que agrupa el código de nuestro proyecto bajo el nombre de este desafío."</p></div>
+</div>
+<!-- SECCIÓN 2 -->
+<div class="section-divider" id="sec-2"></div>
+<div class="section-title"><span>2</span> Estructura de la Clase y Modificadores</div>
+<div class="card">
+<h3>2.1 internal class Program</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>class:</strong> Molde o plantilla obligatoria en C#. Todo código ejecutable debe residir dentro de una clase.<br/>• <strong>internal:</strong> Modificador que restringe la visibilidad al proyecto actual.<br/>• <strong>Program:</strong> Nombre estándar asignado por convención a la clase principal.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> El edificio de la empresa (la clase) y su reglamento interno (internal): solo quienes trabajan adentro pueden usar las oficinas.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">internal class Automovil { int ruedas = 4; }</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Línea 6: Alberga todas las funciones, procedimientos y la rutina principal del desafío.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia10 Ejemplo1 [1-99].txt</code> (Línea 4: <code>internal class Program</code>) y en <code>Guia8 Ejemplo8.txt</code> (Línea 4: <code>internal class Program</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Nos da a entender que se declara una clase interna llamada Program que contiene toda la lógica de la aplicación."</p></div>
+</div>
+<div class="card">
+<h3>2.2 static</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Indica que el método le pertenece a la clase y no a un objeto instanciado. Se invoca directamente sin hacer <code>new</code>.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> El timbre del portón de un condominio: le pertenece al edificio en general, no a un apartamento específico.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">Math.Sqrt(25); // Se llama directo a Math sin instanciar</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Se colocó en todos los métodos para que Program los ejecute directamente en consola.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En todos los métodos de <code>Guia8 Ejemplo7.txt</code> (Línea 38: <code>static Double CalcularSubtotal(...)</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Indica que el método es estático y se ejecuta directamente sin necesidad de crear una instancia con new."</p></div>
+</div>
+<div class="card">
+<h3>2.3 void</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Palabra clave que indica que el método es un <strong>procedimiento</strong> y NO devuelve ningún valor numérico ni texto mediante <code>return</code>.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> Mandar a un empleado a encender las luces: va, las enciende y regresa con las manos vacías; no te entrega ningún objeto físico de regreso.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">static void Saludar() { Console.WriteLine("Hola"); }</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>En <code>static void MostrarReporte</code> y <code>static void MostrarBienvenida</code>, ya que su única labor es imprimir en pantalla.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> <code>Guia8 Ejemplo1.txt</code> (Línea 23: <code>static void Par(int a)</code>) y <code>Guia8 Ejemplo8.txt</code> (Línea 31: <code>static void MostrarBienvenida()</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Especifica que es un procedimiento que ejecuta acciones de salida pero no retorna ningún valor calculado."</p></div>
+</div>
+<!-- SECCIÓN 3 -->
+<div class="section-divider" id="sec-3"></div>
+<div class="section-title"><span>3</span> Punto de Entrada (Main)</div>
+<div class="card">
+<h3>3.1 static void Main(string[] args)</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Punto de inicio obligatorio de toda aplicación de consola en C#. El sistema operativo la invoca al arrancar.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> La puerta principal de un centro comercial: todos entran obligatoriamente por ahí antes de ir a los pasillos.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">static void Main(string[] args) { Console.WriteLine("Inicio"); }</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Líneas 11-78: Orquesta la bienvenida, declara los 3 arreglos, ejecuta el ciclo de captura de las 5 unidades y llama al procedimiento de reporte final.</p></div>
+<button class="btn-diagram" onclick="openModal('modal-main')">🔍 Ver Diagrama de Main</button><div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Presente en cada uno de los archivos del laboratorio, ej. <code>Guia8 Ejemplo1.txt</code> (Línea 6: <code>public static void Main(string[] args)</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es la rutina principal que orquesta el orden de ejecución de todo el programa."</p></div>
+</div>
+<!-- SECCIÓN 4 -->
+<div class="section-divider" id="sec-4"></div>
+<div class="section-title"><span>4</span> Variables, Constantes y Tipos de Datos</div>
+<div class="card">
+<h3>4.1 const int TAM = 5;</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Constante entera inmutable; su valor no puede ser alterado en ninguna parte del código durante la ejecución.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> La capacidad máxima de asientos de un autobús: no puedes cambiar el número de asientos a mitad del viaje.</div>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">const int DIAS_SEMANA = 7;</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Línea 9: Garantiza que la flota fija de 5 microbuses sea consistente en los arreglos y en los ciclos.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Sigue la regla del desafío práctico: <em>"Una empresa necesita registrar el consumo de una flota fija de 5 microbuses"</em>.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es una constante entera que define el tamaño fijo de 5 microbuses para dimensionar los arreglos y limitar los bucles contadores."</p></div>
+</div>
+<div class="card">
+<h3>4.2 Double y String</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>Double:</strong> Número decimal de doble precisión (64 bits) para valores continuos.<br/>• <strong>String:</strong> Secuencia de caracteres alfanuméricos entre comillas dobles.</p></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Double se usó para distancias (km) y combustible (galones). String para placas (unidades) y clasificaciones ("Óptimo").</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia7 Ejemplo6.txt</code> (Línea 6: <code>String nombre;</code> y Línea 7: <code>Double sueldo;</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Usamos Double para precisión en los cálculos de consumo y String para identificar las placas de las unidades."</p></div>
+</div>
+<!-- SECCIÓN 5 -->
+<div class="section-divider" id="sec-5"></div>
+<div class="section-title"><span>5</span> Arreglos Unidimensionales (Vectores)</div>
+<div class="card">
+<h3>5.1 String[] unidades, Double[] kilometros, Double[] galones</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Son 3 vectores en memoria RAM de tamaño 5 creados con el operador <code>new</code>. Almacenan información en posiciones contiguas indexadas desde 0 hasta 4.</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> Tres archivadores horizontales con 5 casilleros numerados del 0 al 4. El casillero 0 de los tres archivadores guarda la información del mismo microbús.</div>
+<button class="btn-diagram" onclick="openModal('modal-arreglos')">🔍 Ver Diagrama Gráfico de Memoria</button>
+<div class="item-block"><span class="item-label">3. Ejemplo:</span><div class="code-block">Double[] notas = new Double[5];
+notas[0] = 9.5;</div></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Líneas 19-21: Cumple el 25% de la rúbrica manteniendo la correspondencia paralela por índice [i].</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Tomado idéntico a <code>Guia9 Ejemplo2.txt</code> (Líneas 11-12: <code>Double[] Notas = ...; String[] Alumnos = ...;</code>) y <code>Guia9 Ejemplo7.txt</code> (Líneas 11-12: <code>String[] producto = new String[num]; Double[] precio = new Double[num];</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Son 3 arreglos unidimensionales paralelos que garantizan retener en memoria los datos de los 5 microbuses sin usar colecciones dinámicas, manteniendo la correspondencia por posición."</p></div>
+</div>
+<!-- SECCIÓN 6 -->
+<div class="section-divider" id="sec-6"></div>
+<div class="section-title"><span>6</span> Entrada y Salida en Consola</div>
+<div class="card">
+<h3>6.1 Console.Write, Console.WriteLine, Console.Clear y Console.ReadKey</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>Console.Write:</strong> Imprime texto y mantiene el cursor en la misma línea.<br/>• <strong>Console.WriteLine:</strong> Imprime texto y salta a la siguiente línea.<br/>• <strong>Console.Clear:</strong> Limpia la pantalla para presentar el reporte ordenado.<br/>• <strong>Console.ReadKey:</strong> Pausa la consola para evitar que se cierre la ventana al terminar.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia7 Ejemplo6.txt</code> (Línea 11: <code>Console.Clear();</code>) y al final de todos los ejercicios: <code>Console.ReadKey();</code>.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Utilizamos Console.Clear() para presentar una interfaz limpia y Console.ReadKey() para evitar el cierre automático de la ventana al finalizar el informe."</p></div>
+</div>
+<!-- SECCIÓN 7 -->
+<div class="section-divider" id="sec-7"></div>
+<div class="section-title"><span>7</span> Ciclos de Control (FOR y WHILE)</div>
+<div class="card">
+<h3>7.1 Ciclo FOR (Recorrido Sistemático)</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Bucle contador con 3 partes: inicialización (<code>int i = 0</code>), condición (<code>i &lt; TAM</code>) e incremento (<code>i++</code>). Recorre metódicamente las 5 posiciones.</p></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><p>Se usó dos veces: el primer FOR para la captura de las 5 unidades en memoria, y el segundo FOR dentro del reporte para calcular y dibujar la tabla.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Estructura enseñada en la <code>Guia6 Ejemplo1.txt</code> y <code>Guia9 Ejemplo2.txt</code> (Línea 15: <code>for (i = 0; i &lt; Notas.Length; i = i + 1)</code>).</div>
+</div>
+<div class="card">
+<h3>7.2 Ciclo WHILE (Validación Continua)</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Bucle condicional indeterminado que repite su bloque mientras la condición sea verdadera. Si el usuario ingresa un dato erróneo (letras o ≤ 0), el ciclo no lo deja avanzar.</p></div>
+<button class="btn-diagram" onclick="openModal('modal-while')">🔍 Ver Diagrama de Flujo del WHILE</button>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia6 Ejemplo1 validado.txt</code> (Líneas 21-29: <code>while (!Double.TryParse(...) || nota &lt; 0)</code>) y <code>Guia7 Ejemplo1.txt</code>.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Cumple el numeral 3 de la rúbrica: si el usuario ingresa un valor menor o igual a cero o texto no numérico, el WHILE reporta el error y vuelve a solicitar el mismo dato de forma iterativa."</p></div>
+</div>
+<!-- SECCIÓN 8 -->
+<div class="section-divider" id="sec-8"></div>
+<div class="section-title"><span>8</span> Estructuras de Decisión (IF / ELSE)</div>
+<div class="card">
+<h3>8.1 if / else en ClasificarRendimiento</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>Estructura de bifurcación condicional. Si la expresión lógica es verdadera ejecuta una rama, de lo contrario ejecuta la alternativa.</p></div>
+<div class="item-block"><span class="item-label">4. Uso en el Desafío:</span><div class="code-block">if (rendimiento &gt;= 30.00)
+    return "Óptimo";
+else
+    return "Alto Consumo";</div></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> En <code>Guia8 Ejemplo1.txt</code> (Línea 27: evaluación de par o impar con <code>if / else</code>) y <code>Guia8 Ejemplo8.txt</code> (Línea 65: <code>if (promedio &gt;= 6)</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Aplica exactamente la regla de negocio del desafío: si el rendimiento es mayor o igual a 30 km/gal retorna Óptimo, sino retorna Alto Consumo."</p></div>
+</div>
+<!-- SECCIÓN 9 -->
+<div class="section-divider" id="sec-9"></div>
+<div class="section-title"><span>9</span> Modularización: Funciones vs Procedimientos</div>
+<div class="card">
+<h3>9.1 Comparativa Fundamental (Guía 8)</h3>
+<p>La rúbrica (Punto 2, 30%) exigía organizar la lógica fuera de Main en métodos independientes:</p>
+<button class="btn-diagram" onclick="openModal('modal-modular')">🔍 Ver Diagrama de Arquitectura Modular</button>
+<div class="item-block" style="margin-top: 1rem;"><span class="item-label">• Función CalcularRendimiento (Retorna Double):</span><p>Recibe los km y galones de una unidad y devuelve el resultado numérico con <code>return km / gal;</code>.</p></div>
+<div class="item-block"><span class="item-label">• Función ClasificarRendimiento (Retorna String):</span><p>Recibe el rendimiento calculado y devuelve la categoría textual con <code>return "Óptimo";</code> o <code>return "Alto Consumo";</code>.</p></div>
+<div class="item-block"><span class="item-label">• Procedimiento MostrarReporte (Tipo void):</span><p>Recibe los arreglos completos y se encarga de procesar e imprimir en pantalla el consolidado sin devolver datos.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Basado en <code>Guia8 Ejemplo7.txt</code> (Líneas 38-60: Funciones de cálculo con retorno) y <code>Guia8 Ejemplo8.txt</code> (Procedimientos de visualización).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Una función tiene tipo de dato específico y siempre devuelve un resultado con return (como CalcularRendimiento); un procedimiento es void porque realiza acciones como imprimir en pantalla y no devuelve valores."</p></div>
+</div>
+<!-- SECCIÓN 10 -->
+<div class="section-divider" id="sec-10"></div>
+<div class="section-title"><span>10</span> Conversión y Validación Segura</div>
+<div class="card">
+<h3>10.1 Double.TryParse y el parámetro out</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>Double.TryParse:</strong> Intenta convertir texto a número de forma segura sin provocar un error fatal de sistema si el usuario escribe letras.<br/>• <strong>out km:</strong> Parámetro por referencia de salida que recibe el número convertido si la función tiene éxito.<br/>• <strong>Operador !:</strong> Niega la condición ("Si NO se pudo convertir").<br/>• <strong>Operador ||:</strong> Disyunción lógica O ("O si el número es ≤ 0").</p></div>
+<div class="analogy"><strong>2. Analogía:</strong> Un detector de monedas en una máquina expendedora: si metes una arandela de metal o una piedra, no se rompe; simplemente la rechaza y te dice que insertes una moneda válida.</div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Extraído textualmente de <code>Guia6 Ejemplo1 validado.txt</code> (Línea 21: <code>while (!Double.TryParse(entrada, out nota) || nota &lt; 0)</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Double.TryParse evalúa si el texto es numérico sin lanzar excepciones. El 'out km' guarda el valor convertido y el bucle repite la solicitud si falló la conversión o si el valor es menor o igual a cero."</p></div>
+</div>
+<!-- SECCIÓN 11 -->
+<div class="section-divider" id="sec-11"></div>
+<div class="section-title"><span>11</span> Manejo de Cadenas de Texto</div>
+<div class="card">
+<h3>11.1 IsNullOrWhiteSpace, Trim, Replace y ?.</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>string.IsNullOrWhiteSpace:</strong> Detecta si el identificador quedó vacío o con solo espacios en blanco.<br/>• <strong>Trim():</strong> Remueve espacios accidentales antes o después del texto.<br/>• <strong>Replace(',', '.'):</strong> Sustituye comas por puntos para compatibilidad con teclados en español.<br/>• <strong>Operador ?.:</strong> Navegación segura para evitar errores de referencia nula si la entrada viene vacía.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Técnica de limpieza estándar requerida para evitar que las cadenas vacías desalineen los arreglos.</div>
+</div>
+<!-- SECCIÓN 12 -->
+<div class="section-divider" id="sec-12"></div>
+<div class="section-title"><span>12</span> Formateo Numérico y Columnas</div>
+<div class="card">
+<h3>12.1 ToString("0.00"), PadLeft y PadRight</h3>
+<div class="item-block"><span class="item-label">1. Definición Técnica:</span><p>• <strong>ToString("0.00"):</strong> Fuerza a que el número decimal tenga siempre exactamente dos cifras decimales (ej. 180 pasa a ser 180.00 y 26.6666 pasa a 26.67).<br/>• <strong>PadRight(ancho):</strong> Rellena con espacios a la derecha para alinear texto a la izquierda.<br/>• <strong>PadLeft(6):</strong> Rellena con espacios a la izquierda para alinear cifras decimales numéricas a la derecha.</p></div>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Cumple con el Punto 4 de la rúbrica del desafío: <em>"Presentar encabezados legibles y espaciado de columnas alineado para la tabla final"</em>.</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Con ToString("0.00") garantizamos los dos decimales que pide la tabla del PDF y con PadLeft(6) y PadRight alineamos verticalmente los números y los textos para que no se desfasen las columnas."</p></div>
+</div>
+<!-- SECCIÓN 13 -->
+<div class="section-divider" id="sec-13"></div>
+<div class="section-title"><span>13</span> Algoritmo de Búsqueda del Peor Rendimiento</div>
+<div class="card">
+<h3>13.1 Encontrar la Unidad Más Ineficiente (Guía 9)</h3>
+<p>Algoritmo clásico de búsqueda del valor menor en un vector:</p>
+<div class="code-block">
+Double peorRendimiento = CalcularRendimiento(kilometros[0], galones[0]);
+int posPeor = 0;
+
+for (int i = 0; i &lt; TAM; i++)
+{
+    Double rend = CalcularRendimiento(kilometros[i], galones[i]);
+    if (rend &lt; peorRendimiento)
+    {
+        peorRendimiento = rend;
+        posPeor = i;
+    }
+}
+      </div>
+<button class="btn-diagram" onclick="openModal('modal-peor')">🔍 Ver Diagrama Paso a Paso de la Búsqueda</button>
+<div class="evidence-box"><strong>Evidencia en Guías del Docente:</strong> Tomado exactamente de <code>Guia9 Ejemplo3.txt</code> (Líneas 23-37: búsqueda del número menor y su posición mediante <code>menor = n[0]; p2 = 0; if (n[i] &lt; menor) { menor = n[i]; p2 = i; }</code>).</div>
+<div class="qna-box"><strong>5. Qué responderle al docente:</strong><p>"Es el algoritmo de la Guía 9 Ejemplo 3: inicializamos asumiendo que el peor rendimiento es el de la primera unidad en la posición 0. Con el ciclo FOR recorremos de 0 a 4 y, si encontramos una unidad con menor km/gal, actualizamos el mínimo y retenemos su posición en posPeor."</p></div>
+</div>
+<footer>
+<p>Manual preparado para la defensa oral del Desafío Práctico #2 — PRE104 (Universidad Don Bosco, Ciclo 02-2026)</p>
+</footer>
+</div>
+<!-- MODALES SVG -->
+
+
+
+
+<script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('show');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+    function switchModalView(modalId, viewType, titleText) {
+      var tabOrig = document.getElementById('tab-orig-' + modalId);
+      var tabFlow = document.getElementById('tab-flow-' + modalId);
+      var panelOrig = document.getElementById('panel-orig-' + modalId);
+      var panelFlow = document.getElementById('panel-flow-' + modalId);
+      var title = document.getElementById('title-' + modalId);
+
+      if (title && titleText) {
+        title.innerText = titleText;
+      }
+
+      if (viewType === 'orig') {
+        tabOrig.classList.add('active');
+        tabFlow.classList.remove('active');
+        panelOrig.classList.add('active');
+        panelFlow.classList.remove('active');
+      } else {
+        tabFlow.classList.add('active');
+        tabOrig.classList.remove('active');
+        panelFlow.classList.add('active');
+        panelOrig.classList.remove('active');
+      }
+    }
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('show');
+      }
+    };
+</script>
+<div class="modal" id="modal-main"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-main')">×</button><h2 style="color: var(--accent); margin-bottom: 1rem; font-weight: 800;">Diagrama de Flujo General: Main() [Inicio a Fin]</h2><div class="diagram-svg-container">
+<svg viewbox="0 0 500 780" xmlns="http://www.w3.org/2000/svg">
+<!-- INICIO -->
+<ellipse cx="250" cy="35" fill="#334155" rx="75" ry="22" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" x="250" y="41">INICIO (Main)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="57" y2="90"></line>
+<!-- MostrarBienvenida -->
+<rect fill="#1e293b" height="45" rx="6" stroke="#334155" stroke-width="1.5" width="240" x="130" y="90"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="117">Llamar a MostrarBienvenida()</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="135" y2="165"></line>
+<!-- Declarar arreglos -->
+<rect fill="#1e293b" height="50" rx="6" stroke="#334155" stroke-width="1.5" width="280" x="110" y="165"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="188">Declarar Arreglos (TAM = 5):</text>
+<text fill="#38bdf8" font-size="11" text-anchor="middle" x="250" y="204">unidades[], kilometros[], galones[]</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="215" y2="245"></line>
+<!-- Inicio ciclo for -->
+<rect fill="#0369a1" height="40" rx="6" width="170" x="165" y="245"></rect>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="250" y="270">i = 0</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="285" y2="315"></line>
+<!-- Rombo For -->
+<polygon fill="#151d30" points="250,315 370,360 250,405 130,360" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="250" y="365">¿ i &lt; 5 ?</text>
+<!-- SI: Capturar datos -->
+<line stroke="#34d399" stroke-width="2" x1="250" x2="250" y1="405" y2="440"></line>
+<text fill="#34d399" font-size="12" font-weight="bold" x="265" y="425">SÍ</text>
+<rect fill="#1e293b" height="75" rx="6" stroke="#38bdf8" stroke-width="1.5" width="300" x="100" y="440"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="462">Capturar y Validar con WHILE:</text>
+<text fill="#94a3b8" font-size="11" text-anchor="middle" x="250" y="482">• unidades[i] (no vacío)</text>
+<text fill="#94a3b8" font-size="11" text-anchor="middle" x="250" y="500">• kilometros[i] &gt; 0  |  • galones[i] &gt; 0</text>
+<!-- Incrementar i -->
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="515" y2="545"></line>
+<rect fill="#0369a1" height="35" rx="6" width="140" x="180" y="545"></rect>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="250" y="567">i = i + 1</text>
+<!-- Regresar al rombo -->
+<line stroke="#94a3b8" stroke-width="2" x1="180" x2="60" y1="562" y2="562"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="60" x2="60" y1="562" y2="360"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="60" x2="130" y1="360" y2="360"></line>
+<!-- NO: Fin ciclo for -->
+<line stroke="#f87171" stroke-width="2" x1="370" x2="440" y1="360" y2="360"></line>
+<text fill="#f87171" font-size="12" font-weight="bold" x="385" y="352">NO</text>
+<line stroke="#f87171" stroke-width="2" x1="440" x2="440" y1="360" y2="615"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="440" x2="370" y1="615" y2="615"></line>
+<!-- Llamar reporte -->
+<rect fill="#1e293b" height="45" rx="6" stroke="#334155" stroke-width="1.5" width="240" x="130" y="595"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="622">Llamar a MostrarReporte()</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="640" y2="670"></line>
+<!-- ReadKey -->
+<rect fill="#1e293b" height="35" rx="6" stroke="#334155" stroke-width="1.5" width="200" x="150" y="670"></rect>
+<text fill="#ffffff" font-size="11" text-anchor="middle" x="250" y="692">Console.ReadKey() [Pausa]</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="705" y2="735"></line>
+<!-- FIN -->
+<ellipse cx="250" cy="752" fill="#334155" rx="75" ry="22" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle" x="250" y="758">FIN</text>
+</svg>
+</div></div></div><div class="modal" id="modal-arreglos"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-arreglos')">×</button><h2 id="title-modal-arreglos" style="color: var(--accent); margin-bottom: 0.75rem; font-weight: 800;">Estructura de Memoria: Arreglos Paralelos</h2><div class="view-toggle-bar"><button class="view-tab-btn active" id="tab-orig-modal-arreglos" onclick="switchModalView('modal-arreglos', 'orig', 'Estructura de Memoria: Arreglos Paralelos')" type="button">📊 Vista Original</button><button class="view-tab-btn" id="tab-flow-modal-arreglos" onclick="switchModalView('modal-arreglos', 'flow', 'Diagrama de Flujo: Asignación a Arreglos en Memoria')" type="button">🔄 Ver en Diagrama de Flujo</button></div><div class="view-panel active" id="panel-orig-modal-arreglos"><div class="diagram-svg-container">
+<svg viewbox="0 0 750 320" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#151d30" height="280" rx="10" stroke="#334155" stroke-width="2" width="710" x="20" y="20"></rect>
+<text fill="#94a3b8" font-size="14" font-weight="bold" x="50" y="65">ÍNDICE [ i ]</text>
+<rect fill="#0b0f19" height="30" rx="4" width="90" x="160" y="45"></rect><text fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle" x="205" y="66">[ 0 ]</text>
+<rect fill="#0b0f19" height="30" rx="4" width="90" x="270" y="45"></rect><text fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle" x="315" y="66">[ 1 ]</text>
+<rect fill="#0b0f19" height="30" rx="4" width="90" x="380" y="45"></rect><text fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle" x="425" y="66">[ 2 ]</text>
+<rect fill="#0b0f19" height="30" rx="4" width="90" x="490" y="45"></rect><text fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle" x="535" y="66">[ 3 ]</text>
+<rect fill="#0b0f19" height="30" rx="4" width="90" x="600" y="45"></rect><text fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle" x="645" y="66">[ 4 ]</text>
+<text fill="#f1f5f9" font-size="14" font-weight="bold" x="50" y="125">unidades[]</text>
+<rect fill="#0284c7" height="35" rx="4" width="90" x="160" y="105"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="205" y="128">"MB-01"</text>
+<rect fill="#0284c7" height="35" rx="4" width="90" x="270" y="105"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="315" y="128">"MB-02"</text>
+<rect fill="#0284c7" height="35" rx="4" width="90" x="380" y="105"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="425" y="128">"MB-03"</text>
+<rect fill="#0284c7" height="35" rx="4" width="90" x="490" y="105"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="535" y="128">"MB-04"</text>
+<rect fill="#0284c7" height="35" rx="4" width="90" x="600" y="105"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="645" y="128">"MB-05"</text>
+<text fill="#f1f5f9" font-size="14" font-weight="bold" x="50" y="185">kilometros[]</text>
+<rect fill="#0369a1" height="35" rx="4" width="90" x="160" y="165"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="205" y="188">180.0</text>
+<rect fill="#0369a1" height="35" rx="4" width="90" x="270" y="165"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="315" y="188">120.0</text>
+<rect fill="#0369a1" height="35" rx="4" width="90" x="380" y="165"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="425" y="188">210.0</text>
+<rect fill="#0369a1" height="35" rx="4" width="90" x="490" y="165"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="535" y="188">95.0</text>
+<rect fill="#0369a1" height="35" rx="4" width="90" x="600" y="165"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="645" y="188">160.0</text>
+<text fill="#f1f5f9" font-size="14" font-weight="bold" x="50" y="245">galones[]</text>
+<rect fill="#075985" height="35" rx="4" width="90" x="160" y="225"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="205" y="248">5.0</text>
+<rect fill="#075985" height="35" rx="4" width="90" x="270" y="225"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="315" y="248">4.5</text>
+<rect fill="#075985" height="35" rx="4" width="90" x="380" y="225"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="425" y="248">6.0</text>
+<rect fill="#075985" height="35" rx="4" width="90" x="490" y="225"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="535" y="248">4.0</text>
+<rect fill="#075985" height="35" rx="4" width="90" x="600" y="225"></rect><text fill="#ffffff" font-size="14" text-anchor="middle" x="645" y="248">4.8</text>
+</svg>
+</div></div><div class="view-panel" id="panel-flow-modal-arreglos"><div class="diagram-svg-container">
+<svg viewbox="0 0 500 520" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="250" cy="30" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="250" y="35">INICIO</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="50" y2="85"></line>
+<rect fill="#1e293b" height="45" rx="6" stroke="#334155" width="280" x="110" y="85"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="112">Dimensionar vectores de tamaño TAM (5)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="130" y2="165"></line>
+<!-- Entrada de datos -->
+<polygon fill="#0284c7" points="130,165 370,165 330,215 90,215"></polygon>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="230" y="195">Leer datos validados de unidad [i]</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="215" y2="255"></line>
+<!-- Almacenar por índice -->
+<rect fill="#1e293b" height="75" rx="6" stroke="#38bdf8" stroke-width="1.5" width="300" x="100" y="255"></rect>
+<text fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" x="250" y="278">Guardar en el mismo índice [i]:</text>
+<text fill="#ffffff" font-size="11" text-anchor="middle" x="250" y="298">unidades[i] ← id</text>
+<text fill="#ffffff" font-size="11" text-anchor="middle" x="250" y="315">kilometros[i] ← km  |  galones[i] ← gal</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="250" y1="330" y2="370"></line>
+<!-- Rombo fin -->
+<polygon fill="#151d30" points="250,370 360,410 250,450 140,410" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="250" y="415">¿i == 4?</text>
+<!-- SI -> FIN -->
+<line stroke="#34d399" stroke-width="2" x1="250" x2="250" y1="450" y2="485"></line>
+<text fill="#34d399" font-size="11" font-weight="bold" x="265" y="470">SÍ</text>
+<ellipse cx="250" cy="500" fill="#334155" rx="60" ry="18" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="250" y="505">FIN</text>
+<!-- NO -> Siguiente -->
+<line stroke="#f87171" stroke-width="2" x1="360" x2="430" y1="410" y2="410"></line>
+<line stroke="#f87171" stroke-width="2" x1="430" x2="430" y1="410" y2="190"></line>
+<line stroke="#f87171" stroke-width="2" x1="430" x2="355" y1="190" y2="190"></line>
+<text fill="#f87171" font-size="11" font-weight="bold" x="380" y="402">NO</text>
+</svg>
+</div></div></div></div><div class="modal" id="modal-while"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-while')">×</button><h2 id="title-modal-while" style="color: var(--accent); margin-bottom: 0.75rem; font-weight: 800;">Diagrama de Flujo: Validación Continua (WHILE)</h2><div class="view-toggle-bar"><button class="view-tab-btn active" id="tab-orig-modal-while" onclick="switchModalView('modal-while', 'orig', 'Diagrama de Flujo: Validación Continua (WHILE)')" type="button">📊 Vista Original</button><button class="view-tab-btn" id="tab-flow-modal-while" onclick="switchModalView('modal-while', 'flow', 'Diagrama de Flujo: Validación Continua (WHILE)')" type="button">🔄 Ver en Diagrama de Flujo</button></div><div class="view-panel active" id="panel-orig-modal-while"><div class="diagram-svg-container">
+<svg viewbox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="300" cy="30" fill="#334155" rx="90" ry="20"></ellipse><text fill="#ffffff" font-size="13" text-anchor="middle" x="300" y="35">Inicio Captura</text>
+<line stroke="#94a3b8" stroke-width="2" x1="300" x2="300" y1="50" y2="80"></line>
+<polygon fill="#0284c7" points="210,80 390,80 360,120 180,120"></polygon><text fill="#ffffff" font-size="13" text-anchor="middle" x="285" y="105">Leer entrada (ReadLine)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="300" x2="300" y1="120" y2="160"></line>
+<polygon fill="#151d30" points="300,160 460,220 300,280 140,220" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="300" y="215">¿Es inválido?</text>
+<text fill="#f87171" font-size="11" text-anchor="middle" x="300" y="235">(!TryParse || valor &lt;= 0)</text>
+<line stroke="#f87171" stroke-width="2" x1="460" x2="520" y1="220" y2="220"></line>
+<line stroke="#f87171" stroke-width="2" x1="520" x2="520" y1="220" y2="330"></line>
+<rect fill="#991b1b" height="50" rx="6" width="180" x="430" y="330"></rect><text fill="#ffffff" font-size="11" text-anchor="middle" x="520" y="352">Mostrar Mensaje de Error</text><text fill="#ffffff" font-size="11" text-anchor="middle" x="520" y="368">y solicitar de nuevo</text>
+<line stroke="#f87171" stroke-width="2" x1="430" x2="100" y1="355" y2="355"></line><line stroke="#f87171" stroke-width="2" x1="100" x2="100" y1="355" y2="100"></line><line stroke="#f87171" stroke-width="2" x1="100" x2="180" y1="100" y2="100"></line>
+<line stroke="#4ade80" stroke-width="2" x1="300" x2="300" y1="280" y2="340"></line>
+<rect fill="#166534" height="40" rx="6" width="180" x="210" y="340"></rect><text fill="#ffffff" font-size="13" text-anchor="middle" x="300" y="365">Guardar en Arreglo</text>
+</svg>
+</div></div><div class="view-panel" id="panel-flow-modal-while"><div class="diagram-svg-container">
+<svg viewbox="0 0 520 540" xmlns="http://www.w3.org/2000/svg">
+<!-- INICIO -->
+<ellipse cx="260" cy="30" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="260" y="35">INICIO</text>
+<line stroke="#94a3b8" stroke-width="2" x1="260" x2="260" y1="50" y2="85"></line>
+<!-- Lectura inicial -->
+<polygon fill="#0284c7" points="150,85 370,85 330,135 110,135"></polygon>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="240" y="115">Leer entrada (ReadLine)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="260" x2="260" y1="135" y2="180"></line>
+<!-- Rombo de Decisión WHILE -->
+<polygon fill="#151d30" points="260,180 430,240 260,300 90,240" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="260" y="235">¿Dato Inválido?</text>
+<text fill="#f87171" font-size="11" text-anchor="middle" x="260" y="255">(!TryParse || valor &lt;= 0)</text>
+<!-- SI -> BUCLE DE ERROR -->
+<line stroke="#f87171" stroke-width="2" x1="430" x2="475" y1="240" y2="240"></line>
+<text fill="#f87171" font-size="12" font-weight="bold" x="440" y="230">SÍ</text>
+<line stroke="#f87171" stroke-width="2" x1="475" x2="475" y1="240" y2="350"></line>
+<line stroke="#f87171" stroke-width="2" x1="475" x2="390" y1="350" y2="350"></line>
+<!-- Proceso de re-solicitud -->
+<rect fill="#991b1b" height="55" rx="6" width="260" x="130" y="330"></rect>
+<text fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle" x="260" y="352">Mostrar: "Error: ingrese número &gt; 0"</text>
+<text fill="#fecaca" font-size="11" text-anchor="middle" x="260" y="370">Leer nueva entrada (ReadLine)</text>
+<!-- Regreso al rombo -->
+<line stroke="#f87171" stroke-width="2" x1="130" x2="45" y1="355" y2="355"></line>
+<line stroke="#f87171" stroke-width="2" x1="45" x2="45" y1="355" y2="240"></line>
+<line stroke="#f87171" stroke-width="2" x1="45" x2="90" y1="240" y2="240"></line>
+<!-- NO -> ACEPTAR DATO -->
+<line stroke="#34d399" stroke-width="2" x1="260" x2="260" y1="300" y2="410"></line>
+<text fill="#34d399" font-size="12" font-weight="bold" x="275" y="335">NO</text>
+<rect fill="#166534" height="40" rx="6" width="200" x="160" y="410"></rect>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="260" y="435">Guardar valor en arreglo</text>
+<line stroke="#94a3b8" stroke-width="2" x1="260" x2="260" y1="450" y2="485"></line>
+<!-- FIN -->
+<ellipse cx="260" cy="505" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="260" y="510">FIN</text>
+</svg>
+</div></div></div></div><div class="modal" id="modal-modular"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-modular')">×</button><h2 id="title-modal-modular" style="color: var(--accent); margin-bottom: 0.75rem; font-weight: 800;">Arquitectura Modular del Sistema</h2><div class="view-toggle-bar"><button class="view-tab-btn active" id="tab-orig-modal-modular" onclick="switchModalView('modal-modular', 'orig', 'Arquitectura Modular del Sistema')" type="button">📊 Vista Original</button><button class="view-tab-btn" id="tab-flow-modal-modular" onclick="switchModalView('modal-modular', 'flow', 'Diagrama de Flujo: Llamadas a Funciones Modulares')" type="button">🔄 Ver en Diagrama de Flujo</button></div><div class="view-panel active" id="panel-orig-modal-modular"><div class="diagram-svg-container">
+<svg viewbox="0 0 650 350" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#0b0f19" height="60" rx="8" stroke="#38bdf8" stroke-width="2" width="200" x="225" y="20"></rect><text fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle" x="325" y="45">Main()</text><text fill="#94a3b8" font-size="11" text-anchor="middle" x="325" y="65">(Rutina Principal / Orquestador)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="250" x2="120" y1="80" y2="140"></line><line stroke="#94a3b8" stroke-width="2" x1="400" x2="520" y1="80" y2="140"></line>
+<rect fill="#151d30" height="55" rx="6" stroke="#334155" width="170" x="40" y="140"></rect><text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="125" y="165">MostrarBienvenida()</text><text fill="#94a3b8" font-size="11" text-anchor="middle" x="125" y="182">[ Procedimiento: void ]</text>
+<rect fill="#151d30" height="55" rx="6" stroke="#334155" width="190" x="430" y="140"></rect><text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="525" y="165">MostrarReporte()</text><text fill="#94a3b8" font-size="11" text-anchor="middle" x="525" y="182">[ Procedimiento: void ]</text>
+<line stroke="#38bdf8" stroke-dasharray="3" stroke-width="2" x1="480" x2="300" y1="195" y2="250"></line><line stroke="#38bdf8" stroke-dasharray="3" stroke-width="2" x1="570" x2="570" y1="195" y2="250"></line>
+<rect fill="#0369a1" height="60" rx="6" width="220" x="180" y="250"></rect><text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="290" y="275">CalcularRendimiento()</text><text fill="#bfdbfe" font-size="11" text-anchor="middle" x="290" y="295">Retorna: Double (km / gal)</text>
+<rect fill="#0369a1" height="60" rx="6" width="180" x="450" y="250"></rect><text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="540" y="275">ClasificarRendimiento()</text><text fill="#bfdbfe" font-size="11" text-anchor="middle" x="540" y="295">Retorna: String ("Óptimo")</text>
+</svg>
+</div></div><div class="view-panel" id="panel-flow-modal-modular"><div class="diagram-svg-container">
+<svg viewbox="0 0 540 600" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="270" cy="30" fill="#334155" rx="90" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="35">INICIO (MostrarReporte)</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="50" y2="85"></line>
+<!-- Ciclo for de 0 a 4 -->
+<rect fill="#0369a1" height="40" rx="6" width="200" x="170" y="85"></rect>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="110">Para i = 0 Hasta 4</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="125" y2="160"></line>
+<!-- Función CalcularRendimiento -->
+<rect fill="#1e293b" height="55" rx="6" stroke="#38bdf8" stroke-width="1.5" width="300" x="120" y="160"></rect>
+<text fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="182">Llamar a CalcularRendimiento(km, gal)</text>
+<text fill="#ffffff" font-size="11" text-anchor="middle" x="270" y="200">Retorna: rend = km / gal</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="215" y2="255"></line>
+<!-- Rombo ClasificarRendimiento -->
+<polygon fill="#151d30" points="270,255 420,305 270,355 120,305" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="302">¿ rend &gt;= 30.00 ?</text>
+<text fill="#94a3b8" font-size="10" text-anchor="middle" x="270" y="320">(ClasificarRendimiento)</text>
+<!-- SI -> Óptimo -->
+<line stroke="#34d399" stroke-width="2" x1="420" x2="470" y1="305" y2="305"></line>
+<line stroke="#34d399" stroke-width="2" x1="470" x2="470" y1="305" y2="380"></line>
+<rect fill="#166534" height="35" rx="4" width="110" x="410" y="380"></rect>
+<text fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle" x="465" y="402">"Óptimo"</text>
+<!-- NO -> Alto Consumo -->
+<line stroke="#f87171" stroke-width="2" x1="120" x2="70" y1="305" y2="305"></line>
+<line stroke="#f87171" stroke-width="2" x1="70" x2="70" y1="305" y2="380"></line>
+<rect fill="#991b1b" height="35" rx="4" width="120" x="15" y="380"></rect>
+<text fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle" x="75" y="402">"Alto Consumo"</text>
+<!-- Unir caminos -->
+<line stroke="#94a3b8" stroke-width="2" x1="465" x2="465" y1="415" y2="455"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="75" x2="75" y1="415" y2="455"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="75" x2="465" y1="455" y2="455"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="455" y2="485"></line>
+<!-- Imprimir fila -->
+<rect fill="#1e293b" height="40" rx="6" stroke="#334155" width="280" x="130" y="485"></rect>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="270" y="510">Imprimir fila formateada en pantalla</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="525" y2="555"></line>
+<ellipse cx="270" cy="575" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="580">FIN</text>
+</svg>
+</div></div></div></div><div class="modal" id="modal-peor"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-peor')">×</button><h2 id="title-modal-peor" style="color: var(--accent); margin-bottom: 0.75rem; font-weight: 800;">Traza del Algoritmo del Peor Rendimiento</h2><div class="view-toggle-bar"><button class="view-tab-btn active" id="tab-orig-modal-peor" onclick="switchModalView('modal-peor', 'orig', 'Traza del Algoritmo del Peor Rendimiento')" type="button">📊 Vista Original</button><button class="view-tab-btn" id="tab-flow-modal-peor" onclick="switchModalView('modal-peor', 'flow', 'Diagrama de Flujo: Búsqueda del Menor Rendimiento')" type="button">🔄 Ver en Diagrama de Flujo</button></div><div class="view-panel active" id="panel-orig-modal-peor"><div class="diagram-svg-container">
+<svg viewbox="0 0 650 340" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#151d30" height="300" rx="8" stroke="#334155" width="610" x="20" y="20"></rect>
+<text fill="#38bdf8" font-size="14" font-weight="bold" x="40" y="55">Semilla inicial: peor = unidad[0] (36.00 km/gal) | posPeor = 0</text>
+<text fill="#94a3b8" font-size="13" x="40" y="100">Vuelta 0 (MB-01): 36.00 &lt; 36.00? NO</text><text fill="#94a3b8" font-size="13" x="450" y="100">Mantiene: 36.00</text>
+<text fill="#f1f5f9" font-size="13" x="40" y="145">Vuelta 1 (MB-02): 26.67 &lt; 36.00? <tspan fill="#4ade80" font-weight="bold">SÍ (Cambia)</tspan></text><text fill="#4ade80" font-size="13" x="450" y="145">Nuevo peor: 26.67 [MB-02]</text>
+<text fill="#94a3b8" font-size="13" x="40" y="190">Vuelta 2 (MB-03): 35.00 &lt; 26.67? NO</text><text fill="#94a3b8" font-size="13" x="450" y="190">Mantiene: 26.67</text>
+<text fill="#f1f5f9" font-size="13" x="40" y="235">Vuelta 3 (MB-04): 23.75 &lt; 26.67? <tspan fill="#f87171" font-weight="bold">SÍ (Mínimo final)</tspan></text><text fill="#f87171" font-size="13" font-weight="bold" x="450" y="235">Nuevo peor: 23.75 [MB-04]</text>
+<text fill="#94a3b8" font-size="13" x="40" y="280">Vuelta 4 (MB-05): 33.33 &lt; 23.75? NO</text><text fill="#94a3b8" font-size="13" x="450" y="280">Mantiene: 23.75</text>
+</svg>
+</div></div><div class="view-panel" id="panel-flow-modal-peor"><div class="diagram-svg-container">
+<svg viewbox="0 0 540 680" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="270" cy="30" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="270" y="35">INICIO</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="50" y2="85"></line>
+<!-- Semilla inicial -->
+<rect fill="#1e293b" height="55" rx="6" stroke="#38bdf8" stroke-width="1.5" width="380" x="80" y="85"></rect>
+<text fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="107">Inicializar con la primera unidad (Guía 9):</text>
+<text fill="#ffffff" font-size="11" text-anchor="middle" x="270" y="126">peorRendimiento = rend[0]  |  posPeor = 0</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="140" y2="175"></line>
+<!-- Contador ciclo for -->
+<rect fill="#0369a1" height="40" rx="6" width="170" x="185" y="175"></rect>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="200">Para i = 0 Hasta 4</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="215" y2="250"></line>
+<!-- Rombo de comparación -->
+<polygon fill="#151d30" points="270,250 430,305 270,360 110,305" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" x="270" y="302">¿ rend[i] &lt; peorRendimiento ?</text>
+<text fill="#94a3b8" font-size="10" text-anchor="middle" x="270" y="318">(¿Es más ineficiente?)</text>
+<!-- SI -> Actualizar mínimo -->
+<line stroke="#34d399" stroke-width="2" x1="430" x2="475" y1="305" y2="305"></line>
+<text fill="#34d399" font-size="12" font-weight="bold" x="440" y="295">SÍ</text>
+<line stroke="#34d399" stroke-width="2" x1="475" x2="475" y1="305" y2="410"></line>
+<line stroke="#34d399" stroke-width="2" x1="475" x2="390" y1="410" y2="410"></line>
+<rect fill="#166534" height="55" rx="6" width="240" x="150" y="390"></rect>
+<text fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle" x="270" y="412">Actualizar variables:</text>
+<text fill="#dcfce7" font-size="11" text-anchor="middle" x="270" y="432">peorRendimiento = rend[i]  |  posPeor = i</text>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="445" y2="485"></line>
+<!-- NO -> Salta actualización -->
+<line stroke="#f87171" stroke-width="2" x1="110" x2="50" y1="305" y2="305"></line>
+<text fill="#f87171" font-size="12" font-weight="bold" x="65" y="295">NO</text>
+<line stroke="#f87171" stroke-width="2" x1="50" x2="50" y1="305" y2="485"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="50" x2="270" y1="485" y2="485"></line>
+<line stroke="#94a3b8" stroke-width="2" x1="270" x2="270" y1="485" y2="520"></line>
+<!-- Siguiente i o Terminar -->
+<polygon fill="#151d30" points="270,520 370,555 270,590 170,555" stroke="#38bdf8" stroke-width="2"></polygon>
+<text fill="#ffffff" font-size="12" text-anchor="middle" x="270" y="560">¿Fin del bucle?</text>
+<line stroke="#34d399" stroke-width="2" x1="270" x2="270" y1="590" y2="625"></line>
+<text fill="#34d399" font-size="11" font-weight="bold" x="285" y="610">SÍ</text>
+<ellipse cx="270" cy="645" fill="#334155" rx="70" ry="20" stroke="#38bdf8" stroke-width="2"></ellipse>
+<text fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" x="270" y="650">FIN</text>
+<line stroke="#f87171" stroke-width="2" x1="370" x2="510" y1="555" y2="555"></line>
+<line stroke="#f87171" stroke-width="2" x1="510" x2="510" y1="555" y2="195"></line>
+<line stroke="#f87171" stroke-width="2" x1="510" x2="355" y1="195" y2="195"></line>
+</svg>
+</div></div></div></div></body>
+</html>
